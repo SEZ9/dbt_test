@@ -2,18 +2,18 @@ version: 2
 
 semantic_models:
   - name: user_sales_summary_semantic
-    model: ref('user_sales_summary')  # 参考 mart 层的模型
+    model: ref('sales_with_date')  # 引用生成的 sales_with_date 表
     description: "A semantic model representing user sales summary"
     primary_entity: user
     entities:
       - name: user
-        type: primary  # 主实体是用户
-        expr: user_id  # 使用 user_id 作为实体标识符
+        type: primary
+        expr: user_id
     measures:
       - name: total_sales_value
         description: "Total value of sales across all users"
-        agg: sum  # 汇总方法为 sum
-        expr: total_sales_value  # 这里引用模型中的 total_sales_value 列
+        agg: sum
+        expr: total_sales_value
       - name: total_tickets_sold
         description: "Total number of tickets sold"
         agg: sum
@@ -22,8 +22,9 @@ semantic_models:
       - name: user_name
         description: "The name of the user"
         type: categorical
-        expr: user_name
-      - name: last_sale_time
-        description: "The last time a user made a sale"
+        expr: username
+      - name: sale_date
+        description: "The date when the sale occurred"
         type: time
-        expr: last_sale_time
+        expr: date_day  # 直接使用 date 表的 date_day 字段
+        time_granularity: day  # 按天粒度

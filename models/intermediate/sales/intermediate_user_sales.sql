@@ -1,20 +1,28 @@
 WITH user_sales_aggregated AS (
-    -- 聚合每个 seller 的总销售额和最近一次的销售时间
     SELECT 
-        s.sales_id,
+        u.user_id,
+        u.user_name,
         SUM(s.price_paid) AS total_sales_value,
-        MAX(s.sale_time) AS last_sale_time
+        COUNT(s.quantity_sold) AS total_tickets_sold,
+        DATE(s.sale_time) AS sale_date  -- 提取 listtime 的日期部分
     FROM {{ ref('stg_sales') }} s
-    GROUP BY s.sales_id
+    LEFT JOIN {{ ref('stg_users') }} u
+        ON s.sales_id = u.user_id
+    GROUP BY u.user_id, u.user_name, DATE(s.sale_time)
+),
+sales_with_date AS (
+    SELECT
+        usa.user_id,
+        usa.user_name,
+        usa.total_sales_value,
+        usa.total_tickets_sold,
+        d.date_day,
+        d.year,
+        d.month,
+        d.day
+    FROM user_sales_aggregated usa
+    LEFT JOIN {{ ref('stg_date') }} d
+        ON usa.sale_date = d.date_day  -- 关联到 date 表的日期字段
 )
 
-SELECT 
-    u.user_id ,
-    u.user_name,
-    u.city AS user_city,
-    usa.total_sales_value,
-    usa.last_sale_time
-FROM {{ ref('stg_users') }} u
--- 这里假设 sales_id 对应用户表中的 userid
-LEFT JOIN user_sales_aggregated usa
-    ON u.user_id = usa.sales_id
+SELECT * FROM sales_with_date

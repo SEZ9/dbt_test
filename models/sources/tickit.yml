@@ -45,7 +45,7 @@ sources:
               - not_null
               - relationships:     # 测试 buyerid 是否是 users 表中的外键
                   to: ref('stg_users')
-                  field: userid
+                  field: user_id
 
           - name: eventid
             description: "ID of the event related to the sale."
@@ -173,7 +173,7 @@ sources:
               - not_null
               - relationships:
                   to: ref('stg_users')
-                  field: userid
+                  field: user_id
 
           - name: eventid
             description: "Foreign key referencing the event for which tickets are being sold."
@@ -181,7 +181,7 @@ sources:
               - not_null
               - relationships:
                   to: ref('stg_event')
-                  field: eventid
+                  field: event_id
 
           - name: dateid
             description: "Foreign key referencing the date when the tickets were listed."

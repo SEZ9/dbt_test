@@ -189,7 +189,7 @@ sources:
               - not_null
               - relationships:
                   to: ref('stg_date')
-                  field: dateid
+                  field: date_id
 
           - name: numtickets
             description: "Number of tickets available for sale."

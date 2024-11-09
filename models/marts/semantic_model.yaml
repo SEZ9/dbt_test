@@ -19,3 +19,12 @@ semantic_models:
         expr: date_day # 引用 time_spine_daily 中的 date_day 列
         type_params:
           time_granularity: day
+metrics: 
+  # Simple type metrics
+  - name: "total_sales_value_metric"
+    description: "Total value of sales across all users"
+    type: simple
+    label: "Total Sales Value"
+    type_params:
+      measure:
+        name: total_sales_value

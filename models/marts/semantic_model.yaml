@@ -2,7 +2,7 @@ version: 2
 
 semantic_models:
   - name: user_sales_summary_semantic
-    model: ref('sales_with_date')  # 引用生成的 sales_with_date 表
+    model: ref('user_sales_aggregated')  # 引用 sales_with_date 模型
     description: "A semantic model representing user sales summary"
     primary_entity: user
     entities:
@@ -26,5 +26,4 @@ semantic_models:
       - name: sale_date
         description: "The date when the sale occurred"
         type: time
-        expr: date_day  # 直接使用 date 表的 date_day 字段
-        time_granularity: day  # 按天粒度
+        expr: date_day 

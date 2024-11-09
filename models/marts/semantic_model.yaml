@@ -2,7 +2,7 @@ version: 2
 
 semantic_models:
   - name: user_sales_summary_semantic
-    model: ref('user_sales_aggregated')  # 引用 sales_with_date 模型
+    model: ref('intermediate_user_sales')  # 引用 sales_with_date 模型
     description: "A semantic model representing user sales summary"
     primary_entity: user
     entities:

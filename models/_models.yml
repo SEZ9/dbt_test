@@ -1,0 +1,13 @@
+version: 2
+
+models:
+  - name: time_spine_daily
+    description: "This is the daily time spine model."
+    time_spine:
+      standard_granularity_column: date_day  # 必须是日期类型的列，按天粒度
+    columns:
+      - name: date_day
+        description: "Daily grain of the time spine."
+        granularity: day  # 在列级别设置粒度
+
+

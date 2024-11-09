@@ -1,0 +1,212 @@
+version: 2
+
+sources:
+  - name: tickit       # 数据源名称
+    database: sample_data_dev  # Redshift 中的数据库名
+    schema: tickit       # Redshift 中的 schema 名
+
+    tables:
+      - name: users      # 用户表
+        description: "Table storing user information in the TICKIT database."
+        columns:
+          - name: userid
+            description: "Unique identifier for each user."
+            tests:
+              - unique
+              - not_null
+
+          - name: username
+            description: "Username of the user."
+
+          - name: firstname
+            description: "First name of the user."
+
+          - name: lastname
+            description: "Last name of the user."
+
+          - name: city
+            description: "City of residence."
+
+          - name: state
+            description: "State of residence."
+
+      - name: sales     # 销售表
+        description: "Table storing sales transactions."
+        columns:
+          - name: salesid
+            description: "Unique identifier for each sale."
+            tests:
+              - unique
+              - not_null
+
+          - name: buyerid
+            description: "ID of the user who bought the ticket."
+            tests:
+              - not_null
+              - relationships:     # 测试 buyerid 是否是 users 表中的外键
+                  to: ref('stg_users')
+                  field: userid
+
+          - name: eventid
+            description: "ID of the event related to the sale."
+            tests:
+              - not_null
+
+          - name: qtysold
+            description: "Quantity of tickets sold."
+
+          - name: pricepaid
+            description: "Total price paid for the tickets."
+            tests:
+              - not_null
+
+          - name: commission
+            description: "Commission charged on the sale."
+
+          - name: saletime
+            description: "Timestamp when the sale was made."
+            tests:
+              - not_null
+
+      - name: event     # 活动表
+        description: "Table storing information about events."
+        columns:
+          - name: eventid
+            description: "Unique identifier for each event."
+            tests:
+              - unique
+              - not_null
+
+          - name: eventname
+            description: "Name of the event."
+
+          - name: venueid
+            description: "ID of the venue where the event takes place."
+          
+          - name: catid
+            description: "ID of the category whicth the event."
+
+          - name: dateid
+            description: "ID of the date when the event takes."  
+
+          - name: starttime
+            description: "The start time of the event."
+
+      - name: venue     # 场馆表
+        description: "Table storing venue information."
+        columns:
+          - name: venueid
+            description: "Unique identifier for each venue."
+            tests:
+              - unique
+              - not_null
+
+          - name: venuename
+            description: "Name of the venue."
+
+          - name: venuecity
+            description: "City where the venue is located."
+
+          - name: venuestate
+            description: "State where the venue is located."
+          
+          - name: venueseats
+            description: "The max seats number of the venue can afford."
+
+      - name: category  # 分类表
+        description: "Table storing event category information."
+        columns:
+          - name: catid
+            description: "Unique identifier for each category."
+            tests:
+              - unique
+              - not_null
+
+          - name: catgroup
+            description: "Event category group."
+
+          - name: catname
+            description: "Event category name."
+
+          - name: catdesc
+            description: "Description of the event category."
+
+      - name: date      # 日期维度表
+        description: "Table storing information about dates."
+        columns:
+          - name: dateid
+            description: "Unique identifier for each date."
+            tests:
+              - unique
+              - not_null
+
+          - name: caldate
+            description: "Calendar date."
+
+          - name: day
+            description: "Day of the month."
+
+          - name: month
+            description: "Month of the year."
+
+          - name: year
+            description: "Year of the date."
+
+          - name: week
+            description: "Week of the year."
+
+          - name: quarter
+            description: "Quarter of the year."
+
+      - name: listing    # 列表表
+        description: "Table storing ticket listings for events."
+        columns:
+          - name: listid
+            description: "Unique identifier for each listing. Primary key."
+            tests:
+              - unique
+              - not_null
+
+          - name: sellerid
+            description: "Foreign key referencing the user who sells the tickets."
+            tests:
+              - not_null
+              - relationships:
+                  to: ref('stg_users')
+                  field: userid
+
+          - name: eventid
+            description: "Foreign key referencing the event for which tickets are being sold."
+            tests:
+              - not_null
+              - relationships:
+                  to: ref('stg_event')
+                  field: eventid
+
+          - name: dateid
+            description: "Foreign key referencing the date when the tickets were listed."
+            tests:
+              - not_null
+              - relationships:
+                  to: ref('stg_date')
+                  field: dateid
+
+          - name: numtickets
+            description: "Number of tickets available for sale."
+            tests:
+              - not_null
+
+          - name: priceperticket
+            description: "Fixed price per ticket."
+            tests:
+              - not_null
+
+          - name: totalprice
+            description: "Total price for the listing (numtickets * priceperticket)."
+            tests:
+              - not_null
+
+          - name: listtime
+            description: "Timestamp when the listing was created."
+            tests:
+              - not_null

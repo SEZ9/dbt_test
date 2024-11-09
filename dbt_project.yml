@@ -1,0 +1,13 @@
+name: 'tickit_project'
+version: '1.0'
+config-version: 2
+
+# Model 配置
+models:
+  tickit_project:
+    staging:
+      +schema: staging
+    intermediate:
+      +schema: intermediate
+    marts:
+      +schema: marts

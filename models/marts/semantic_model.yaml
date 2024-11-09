@@ -1,23 +1,13 @@
-version: 2
-
 semantic_models:
   - name: user_sales_summary_semantic
-    model: ref('intermediate_user_sales')  # 引用 sales_with_date 模型
-    description: "A semantic model representing user sales summary"
+    model: ref('user_sales_summary')
     primary_entity: user
-    entities:
-      - name: user
-        type: primary
-        expr: user_id
     measures:
       - name: total_sales_value
         description: "Total value of sales across all users"
         agg: sum
         expr: total_sales_value
-      - name: total_tickets_sold
-        description: "Total number of tickets sold"
-        agg: sum
-        expr: total_tickets_sold
+        agg_time_dimension: sale_date
     dimensions:
       - name: user_name
         description: "The name of the user"
@@ -26,4 +16,6 @@ semantic_models:
       - name: sale_date
         description: "The date when the sale occurred"
         type: time
-        expr: date_day 
+        expr: date_day # 引用 time_spine_daily 中的 date_day 列
+        type_params:
+          time_granularity: day

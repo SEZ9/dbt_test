@@ -10,4 +10,4 @@ models:
     intermediate:
       +schema: intermediate
     marts:
-      +schema: marts
+      +schema: marts 
